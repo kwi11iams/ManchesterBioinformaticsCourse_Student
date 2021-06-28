@@ -101,8 +101,9 @@ def transformImage(shifts, rotates):
     global lungs3
     global floating
     shifted_image = interpolation.shift(lungs3, shifts) # interpolation shifts the specified image
-    transformed_image = rotate(shifted_image, rotates, reshape=False) # rotate function rotates the shifted image a specific number of degrees, reshape=False stops the image being increased or decreased in size
-    floating.set_data(transformed_image)
+    transformed_image = rotate(shifted_image, -rotates, reshape=False) # rotate function rotates the shifted image a specific number of degrees, reshape=False stops the image being increased or decreased in size
+    lungs3 = transformed_image
+    floating.set_data(lungs3)
     fig.canvas.draw()
 
 # As an example use of the function transformImage, this input whould shift the image up 12 pixels and to the left 20 pixels
@@ -166,3 +167,52 @@ print(f'You moved {down-up} down and {right-left} right.')
 # I think there may be issues with the function reseting values each time
 # each time the image switches between moving up and down, to left and right the centre reset
 # I think this is to do with the setting of the variables down=0 and right=0 at the start of the function, but I need something to define them first
+
+
+# Create a new figure
+fig, ax = plt.subplots()
+fixed = ax.imshow(lungs, cmap="Greens_r", alpha=0.5)
+floating = ax.imshow(lungs3, alpha=0.5, cmap="Purples_r")
+
+up = 0
+down = 0
+left = 0
+right = 0
+cw = 0
+acw = 0
+# Function to shift floating image with keyboard presses
+def eventHandler(event):
+    #global floating
+    #global lungs2
+    #global fig
+    global up
+    global down
+    global left
+    global right
+    global cw
+    global acw
+    whichKey = event.key
+    if whichKey == "up":
+        up += 1
+        transformImage([-1,0], 0)
+    elif whichKey == "down":
+        down += 1
+        transformImage([1,0], 0)
+    elif whichKey == "right":
+        right += 1
+        transformImage([0,1], 0)
+    elif whichKey == "left":
+        left += 1
+        transformImage([0,-1], 0)
+    elif whichKey == ".":
+        cw += 1
+        transformImage([0,0], 1)
+    elif whichKey == ",":
+        acw += 1
+        transformImage([0,0], -1)
+
+fig.canvas.mpl_connect("key_press_event", eventHandler) # call the key press event to the figure
+plt.title("Shift the Image to align using the arrow keys, and rotate using < >")
+plt.show()
+print(f'You moved {down-up} down and {right-left} right and rotated {cw-acw} degrees clockwise.')
+#        
