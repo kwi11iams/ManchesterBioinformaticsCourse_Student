@@ -20,13 +20,13 @@ lungs = imread("lungs.jpg", as_gray=True) # load the file with as_gray = T loads
 lungs2 = imread("lungs2.jpg", as_gray=True)
 
 # Display the images, individually
-plt.imshow(lungs, cmap="Greys_r")
-plt.title("Display of lungs.jpg")
-plt.show()
+#plt.imshow(lungs, cmap="Greys_r")
+#plt.title("Display of lungs.jpg")
+#plt.show()
 
-plt.imshow(lungs2, cmap="Greys_r")
-plt.title("Display of lungs2.jpg")
-plt.show()
+#plt.imshow(lungs2, cmap="Greys_r")
+#plt.title("Display of lungs2.jpg")
+#plt.show()
 
 # Display lung and lungs2 on the same plot with Lungs2 with transparency
 fig, ax = plt.subplots()
