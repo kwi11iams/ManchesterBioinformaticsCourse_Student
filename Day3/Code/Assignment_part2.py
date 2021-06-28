@@ -54,8 +54,8 @@ floating = ax.imshow(lungs2, alpha=0.5, cmap="Purples_r")
 def shiftImage(shifts):
     global lungs2 # global allows you to access the lungs2 variable/image inside the function
     global floating
-    shifted_image = interpolation.shift(lungs2, shifts) # interpolation allows you to shift the specified image 
-    floating.set_data(shifted_image)
+    lungs2 = interpolation.shift(lungs2, shifts) # interpolation allows you to shift the specified image 
+    floating.set_data(lungs2)
     fig.canvas.draw()
 
 # As an example use of the function shiftImage, this input whould shift the image down 10 pixels and to the right 20 pixels
@@ -128,33 +128,32 @@ fig, ax = plt.subplots()
 fixed = ax.imshow(lungs, cmap="Greens_r", alpha=0.5)
 floating = ax.imshow(lungs2, alpha=0.5, cmap="Purples_r")
 
-h0 = 0
-w0 = 0
+up = 0
+down = 0
+left = 0
+right = 0
 # Function to shift floating image with keyboard presses
 def eventHandler(event):
     #global floating
     #global lungs2
     #global fig
-    up = 0
-    down = 0
-    left = 0
-    right = 0
-    if event.key == "up":
+    global up
+    global down
+    global left
+    global right
+    whichKey = event.key
+    if whichKey == "up":
         up += 1
-        print("up")
-    elif event.key == "down":
+        shiftImage([-1,0])
+    elif whichKey == "down":
         down += 1
-        print("down")
-    elif event.key == "right":
+        shiftImage([1,0])
+    elif whichKey == "right":
         right += 1
-        print("right")
-    elif event.key == "left":
+        shiftImage([0,1])
+    elif whichKey == "left":
         left += 1
-        print("left")
-    #h0 = h0 + down - up
-    #w0 = w0 + right - left
-    #shiftImage([h0 + down - up, w0 + right - left])
-    shiftImage([down - up, right - left])
+        shiftImage([0,-1])
 
     
 #floating.figure.canvas.draw()# update the plot window
@@ -162,9 +161,8 @@ def eventHandler(event):
 fig.canvas.mpl_connect("key_press_event", eventHandler) # call the key press event to the figure
 plt.title("Shift the Image to align using the arrow keys")
 plt.show()
-
+print(f'You moved {down-up} down and {right-left} right.')
 # This current code only allows us to move the image up/down/left/right once, to improve the code we need to ensure that h0 and w0 allows us to continually press keyboard keys to keep moving the image. 
 # I think there may be issues with the function reseting values each time
 # each time the image switches between moving up and down, to left and right the centre reset
 # I think this is to do with the setting of the variables down=0 and right=0 at the start of the function, but I need something to define them first
-
